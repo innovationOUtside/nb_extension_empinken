@@ -98,9 +98,19 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
     var initialize = function () {
         var layout_cell_color = function () {
             var style = document.createElement("style");
-            style.innerHTML = ".ou_student_outer {background-color: #ffffcc;}; .ou_student_prompt {background-color: #ffeecd;};.ou_commentate_outer {background-color: #eda7c3;}; .ou_commentate_prompt {background-color: #f4cadb;}; .ou_activity_outer {background-color: #c8ecff;}; .ou_activity_prompt {background-color: #ecf6ff;};};";
+            style.innerHTML = ".ou_student_outer {background-color: #ffffcc;}; .ou_student_prompt {background-color: #ffeecd;};";
             document.getElementsByTagName("head")[0].appendChild(style);
+
+            style = document.createElement("style");
+            style.innerHTML = ".ou_commentate_outer {background-color: #eda7c3;}; .ou_commentate_prompt {background-color: #f4cadb;};";
+            document.getElementsByTagName("head")[0].appendChild(style);
+
+            style = document.createElement("style");
+            style.innerHTML = ".ou_activity_outer {background-color: #c8ecff;}; .ou_activity_prompt {background-color: #ecf6ff;};";
+            document.getElementsByTagName("head")[0].appendChild(style);
+
         }
+
         layout_cell_color();
         update_params();
         Jupyter.toolbar.add_buttons_group([

@@ -1,0 +1,3 @@
+recursive-include jupyter-config *.json
+recursive-include empinken/static *.js
+include empinken/static/*.yaml

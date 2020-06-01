@@ -11,5 +11,5 @@ Three buttons are provided, for colouring:
 
 ```
 jupyter nbextension install empinken --user
-jupyter nbextension enable empinken/index
+jupyter nbextension enable empinken/empinken/index
 ```

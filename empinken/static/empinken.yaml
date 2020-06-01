@@ -1,7 +1,7 @@
 Type: IPython Notebook Extension
 Compatibility: 4.x, 5.x
-Name: Cell colour highlights
-Main: main.js
+Name: nb_extension_empinken
+Main: index.js
 Description: adds buttons for cell highlights
 Parameters:
 - name: empinken_pink

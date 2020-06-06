@@ -1,25 +1,34 @@
 # nb_extension_empinken
 Jupyter notebook extension for background colouring selected cells.
 
-Three buttons are provided, for colouring:
+
+
+Install via:
+
+`pip install git+https://github.com/innovationOUtside/nb_extension_empinken.git`
+
+The extension should be automatically installed and enabled.
+
+If you need to do things manually:
+
+
+```
+jupyter nbextension uninstall empinken
+jupyter nbextension install empinken --user
+jupyter nbextension enable empinken/index
+```
+
+
+Three buttons are provided that toggle the colour of selected code or markdown cells:
 
 - activity cells (blue);
 - student annotation cells (yellow);
 - tutor feedback cells (pink).
 
 
-
-```
-jupyter nbextension install empinken --user
-jupyter nbextension enable empinken/index
-```
-
-
-Provides toolbar buttons to toggle the colouring of selected cells:
-
 ![](.images/empinken_buttons.png)
 
-Not enabled yet, the idea is you will also be able to select which buttons are displayed on the toolbar.
+Not enabled yet, at some point there should be `nbconfigurator` settings that allow you to select which buttons are displayed on the toolbar.
 
 ![](.images/empinken_config.png)
 
@@ -48,4 +57,4 @@ It would probably also make sense to allow users to set colours, which would giv
 
 It strikes me that the extension could be generalised to allow notebook cell tags to be used to identify cells that should be coloured in particular ways. So eg in configurator, associate the tag "activity" with a selected blue etc.
 
-Maybe also consider a setting that would colour all student created cells yellow by hooking something on to the notebook's cell add button? 
+Maybe also consider a setting that would colour all student created cells yellow (or whatever) by hooking something on to the notebook's cell add button? 

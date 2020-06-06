@@ -6,7 +6,7 @@ setuptools.setup(
     version='0.0.1',
     include_package_data=True,
     install_requires=[
-        'notebook'
+        'notebook', 'jupyter_nbextensions_configurator'
     ],
     data_files=[
         # like `jupyter nbextension install --sys-prefix`

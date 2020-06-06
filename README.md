@@ -1,7 +1,7 @@
 # nb_extension_empinken
 Jupyter notebook extension for background colouring selected cells.
 
-
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/innovationOUtside/nb_extension_empinken/master)
 
 Install via:
 

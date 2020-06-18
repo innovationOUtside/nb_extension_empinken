@@ -5,7 +5,9 @@ Jupyter notebook extension for background colouring selected cells.
 
 Install via:
 
-`pip install git+https://github.com/innovationOUtside/nb_extension_empinken.git`
+`pip install --upgrade git+https://github.com/innovationOUtside/nb_extension_empinken.git`
+
+`pip install nb-extension-empinken`
 
 The extension should be automatically installed and enabled.
 

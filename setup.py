@@ -3,7 +3,7 @@ import setuptools
 setuptools.setup(
     name="nb_extension_empinken",
     packages=['empinken'],
-    version='0.0.1',
+    version='0.0.2',
     include_package_data=True,
     install_requires=[
         'notebook', 'jupyter_nbextensions_configurator'

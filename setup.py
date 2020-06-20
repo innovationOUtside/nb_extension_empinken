@@ -15,7 +15,7 @@ setuptools.setup(
         ]),
         # like `jupyter nbextension enable --sys-prefix`
         ("etc/jupyter/nbconfig/notebook.d", [
-            "jupyter-config/notebook.d/empinken.json"
+            "jupyter-config/nbconfig/notebook.d/empinken.json"
         ])
     ],
     zip_safe=False

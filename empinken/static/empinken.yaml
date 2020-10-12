@@ -16,4 +16,3 @@ Parameters:
 - name: empinken_blue_outer_color
   description: Set activity prompt colour
   input_type: color
-  default: #000080

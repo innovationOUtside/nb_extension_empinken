@@ -13,6 +13,6 @@ Parameters:
 - name: empinken_yellow
   description: Enable student cell colour  / empinken button
   input_type: checkbox
-- name: empinken_blue_outer_color
+- name: empinken_blue_outer_color_test
   description: Set activity prompt colour
   input_type: color

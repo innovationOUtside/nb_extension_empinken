@@ -123,7 +123,7 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
                 .ou_commentate_outer {background-color: #eda7c3;}
                 .ou_commentate_prompt {background-color: #f4cadb ;}
                 .ou_activity_outer {background-color: ${params.empinken_blue_outer_color};} 
-                .ou_activity_prompt {background-color: #ebf1f7 !important;;}
+                .ou_activity_prompt {background-color: #ebf1f7 !important;}
             }
 
             

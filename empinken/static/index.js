@@ -11,7 +11,9 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
 
     var params = {
         empinken_pink: true,
-        empinken_blue: false
+        empinken_blue: false,
+        empinken_yellow: true,
+        empinken_blue_outer_color: '#c8ecff'
     };
 
     var typs = ['commentate', 'activity', 'student'];
@@ -55,7 +57,8 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
     var setcommentate = function (cell,typ) {
         console.log("Run setcommentate");
         var cp = cell.element;
-        var prompt = cell.element.find('div.inner_cell');
+        //var prompt = cell.element.find('div.inner_cell');
+        var prompt = cell.element.find('div.input_area')
         if (cell instanceof CodeCell) {
             if ((typ in cell.metadata) && cell.metadata[typ] == true) {
                 cp.addClass('ou_'+typ+'_outer');
@@ -95,9 +98,12 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
     }
 
 
+
+
     var initialize = function () {
         var layout_cell_color = function () {
             var style = document.createElement("style");
+            /*
             style.innerHTML = ".ou_student_outer {background-color: #ffffcc;}; .ou_student_prompt {background-color: #ffeecd;};";
             document.getElementsByTagName("head")[0].appendChild(style);
 
@@ -106,9 +112,34 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
             document.getElementsByTagName("head")[0].appendChild(style);
 
             style = document.createElement("style");
-            style.innerHTML = ".ou_activity_outer {background-color: #c8ecff;}; .ou_activity_prompt {background-color: #ecf6ff;};";
+            style.innerHTML = ".ou_activity_outer {background-color: #c8ecff;}; .ou_activity_prompt {background-color: #ebf1f7 !important;};";
             document.getElementsByTagName("head")[0].appendChild(style);
+            */
+           
+            var new_style = `
+            @media (prefers-color-scheme: light) {
+                .ou_student_outer {background-color: #ffffcc;}
+                .ou_student_prompt {background-color: #ffeecd ;}
+                .ou_commentate_outer {background-color: #eda7c3;}
+                .ou_commentate_prompt {background-color: #f4cadb ;}
+                .ou_activity_outer {background-color: ${params.empinken_blue_outer_color};} 
+                .ou_activity_prompt {background-color: #ebf1f7 !important;;}
+            }
 
+            
+            @media (prefers-color-scheme: dark) {
+                .ou_student_outer {background-color: #fb7302;}
+                .ou_student_prompt {background-color: #ffeecd ;}
+                .ou_commentate_outer {background-color: #9a2204;}
+                .ou_commentate_prompt {background-color: #f4cadb;}
+                .ou_activity_outer: {background-color: #000080;}
+                .ou_activity_prompt {background-color: #ebf1f7;}
+            }
+            `
+
+            style.innerHTML = new_style;
+            document.getElementsByTagName("head")[0].appendChild(style);
+            
         }
 
         layout_cell_color();

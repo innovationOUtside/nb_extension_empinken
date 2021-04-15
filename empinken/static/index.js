@@ -29,14 +29,38 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
         console.log("Run toggle");
         var cell = Jupyter.notebook.get_selected_cell();
         if ((cell instanceof CodeCell) || (cell instanceof MarkdownCell)) {
-            if (!(typ in cell.metadata)) {
-                for (var _typ in typs) {
-                    if (_typ in cell.metadata)
+            if (!('tags' in cell.metadata))
+                cell.metadata.tags = new Array();
+            // We are requesting that typ is set if it isn't set
+            var tstyle = 'style_'+typ;
+            var add_tag = cell.metadata.tags.indexOf(tstyle) === -1;
+            if (add_tag) {
+                // We can only have one style type applied so clear styles
+                for (_typ of typs) {
+                    if (_typ in cell.metadata) {
+                        // Self-cleaning; deprecate the original tags
                         delete cell.metadata[_typ];
+                    }
+                    console.log(_typ);
+                    var anytstyle = 'style_'+_typ;
+                    console.log('wtf', cell.metadata.tags, cell.metadata.tags.indexOf(anytstyle), anytstyle)
+                    cell.metadata.tags = cell.metadata.tags.filter(x => x != anytstyle);
+                    console.log('wtf2', cell.metadata.tags)
                 }
-                cell.metadata[typ] = true;
-            } else delete cell.metadata[typ]; //cell.metadata.commentate = !cell.metadata.commentate
-            setcommentate(cell, typ);
+                if (!('tags' in cell.metadata))
+                    cell.metadata.tags = new Array();
+                console.log('should be empty',cell.metadata.tags)
+                // Add style tag and no longer support metadata tag
+                //cell.metadata[typ] = true;
+                if (cell.metadata.tags.indexOf(tstyle) === -1)
+                    cell.metadata.tags.push(tstyle);
+            } else {
+                // Remove all instances of it
+                cell.metadata.tags = cell.metadata.tags.filter(x => x != tstyle);
+            }
+            
+            for (typ of typs)
+                setcommentate(cell, typ);
         }
     };
     function togglecommentate() {
@@ -53,11 +77,13 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
     };
 
     var setcommentate = function (cell,typ) {
-        console.log("Run setcommentate");
         var cp = cell.element;
         var prompt = cell.element.find('div.inner_cell');
+        var tstyle = 'style_'+typ;
+        var style_me = cell.metadata.tags.indexOf(tstyle) > -1;
+        console.log("Run setcommentate", style_me, tstyle, cell.metadata.tags);
         if (cell instanceof CodeCell) {
-            if ((typ in cell.metadata) && cell.metadata[typ] == true) {
+            if (style_me) {
                 cp.addClass('ou_'+typ+'_outer');
                 prompt.addClass('ou_'+typ+'_prompt');
             } else {
@@ -65,7 +91,7 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
                 prompt.removeClass('ou_'+typ+'_prompt');
             }
         } else if (cell instanceof MarkdownCell) {
-            if ((typ in cell.metadata) && cell.metadata[typ] == true) {
+            if (style_me) {
                 cp.addClass('ou_'+typ+'_outer');
             } else {
                 cp.removeClass('ou_'+typ+'_outer');
@@ -85,9 +111,21 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
             if ((cell instanceof CodeCell) || (cell instanceof MarkdownCell)) {
                 for (_typ of typs) {
                     console.log(_typ)
-                    if (_typ in cell.metadata) {
+                    var tstyle = 'style_'+_typ;
+                    //Legacy handler
+                    if ((_typ in cell.metadata)) {
                         console.log('got one...')
-                        setcommentate(cell, _typ);
+                        //Update legacy style to tagstyle
+                        // Even though only one type should be set it may be multiple ones are incorrectly set?
+                        // That would need handling?
+                        if (!('tags' in cell.metadata))
+                            cell.metadata.tags = new Array();
+                        if ((cell.metadata[_typ] == true) && (cell.metadata.tags.indexOf(tstyle) === -1))
+                                cell.metadata.tags.push(tstyle);
+                    } 
+                    if (('tags' in cell.metadata) && (cell.metadata.tags.indexOf(tstyle) > -1)) {
+                            console.log('got one tags...', cell.metadata, cell.metadata.tags)
+                            setcommentate(cell, _typ);
                     }
                 }
             }

@@ -3,9 +3,13 @@ Jupyter notebook extension for background colouring selected cells.
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/innovationOUtside/nb_extension_empinken/master)
 
-Install the latest version from this repository:
+Install the latest version from the defaul branch in this repository:
 
 `pip install --upgrade git+https://github.com/innovationOUtside/nb_extension_empinken.git`
+
+Or from a particular branch (eg te `tags` branch):
+
+`pip install --upgrade git+https://github.com/innovationOUtside/nb_extension_empinken.git@tags`
 
 Install a released version from PyPi:
 

@@ -14,7 +14,7 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
         empinken_blue: false
     };
 
-    var typs = ['commentate', 'activity', 'student'];
+    var typs = ['commentate', 'activity', 'student', 'solution'];
 
     // update params with any specified in the server's config file
     var update_params = function () {
@@ -75,7 +75,10 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
         console.log("Run togglestudent");
         toggle('student')
     };
-
+    function togglesolution() {
+        console.log("Run togglesolution");
+        toggle('solution')
+    };
     var setcommentate = function (cell,typ) {
         var cp = cell.element;
         var prompt = cell.element.find('div.inner_cell');
@@ -147,6 +150,10 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
             style.innerHTML = ".ou_activity_outer {background-color: #c8ecff;}; .ou_activity_prompt {background-color: #ecf6ff;};";
             document.getElementsByTagName("head")[0].appendChild(style);
 
+            style = document.createElement("style");
+            style.innerHTML = ".ou_solution_outer {background-color: #95ff00;}; .ou_solution_prompt {background-color: #95ff00;};";
+            document.getElementsByTagName("head")[0].appendChild(style);
+
         }
 
         layout_cell_color();
@@ -166,7 +173,12 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
                 help : 'Toggle cell student',
                 icon : 'fa-user-circle',
                 handler : togglestudent
-            }, 'empinken-student', mod_name)
+            }, 'empinken-student', mod_name),
+            Jupyter.keyboard_manager.actions.register ({
+                help : 'Toggle cell solution',
+                icon : 'fa-pencil-square-o',
+                handler : togglesolution
+            }, 'empinken-solution', mod_name)
         ]);
 
         oustyle_notebook_commentate();

@@ -4,9 +4,35 @@ Name: nb_extension_empinken
 Main: index.js
 Description: adds buttons for cell highlights
 Parameters:
-- name: empinken_pink
-  description: Enable tutor comment cell colour  / empinken button
-  input_type: checkbox
-- name: empinken_blue
+- name: empinken.activity
   description: Enable activity cell colour  / empinken button
   input_type: checkbox
+  default: true
+- name: empinken.student
+  description: Enable student contribution cell colour  / empinken button
+  input_type: checkbox
+  default: true
+- name: empinken.commentate
+  description: Enable feedback cell colour  / empinken button
+  input_type: checkbox
+  default: true
+- name: empinken.solution
+  description: Enable solution cell colour  / empinken button
+  input_type: checkbox
+  default: true
+- name: empinken.student_colour
+  description: Select contribution cell colour
+  input_type: color
+  default: "#ffffcc"
+- name: empinken.activity_colour
+  description: Select activity cell colour
+  input_type: color
+  default: "#c8ecff"
+- name: empinken.solution_colour
+  description: Select solution cell colour
+  input_type: color
+  default: "#87f287"
+- name: empinken.commentate_colour
+  description: Select feedback cell colour
+  input_type: color
+  default: "#eda7c3"

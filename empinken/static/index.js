@@ -10,35 +10,75 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
     var MarkdownCell = textcell.MarkdownCell;
 
     var params = {
-        empinken_pink: true,
-        empinken_blue: false
+        commentate: true,
+        activity: true,
+        student: true,
+        solution: true,
+        commentate_colour: "#eda7c3",
+        activity_colour: "#c8ecff",
+        student_colour: "#ffffcc",
+        solution_colour: "#87f287"
     };
 
-    var typs = ['commentate', 'activity', 'student'];
+    var typs = ['commentate', 'activity', 'student', 'solution'];
+
+    var typs_config = {
+        'commentate': {"icon": 'fa-exclamation-circle'},
+        'activity':  {"icon": 'fa-tasks'},
+        'student':  {"icon": 'fa-user-circle'},
+        'solution':  {"icon": 'fa-pencil-square-o'}
+    }
 
     // update params with any specified in the server's config file
     var update_params = function () {
         var config = Jupyter.notebook.config;
         for (var key in params) {
+            console.log("KEY "+ key)
             if (config.data.hasOwnProperty(key))
                 params[key] = config.data[key];
+                console.log("PARAMSKEY "+ key +"DD"+params[key])
         }
     };
 
     function toggle(typ) {
-        console.log("Run toggle");
+        console.log("Run toggle "+typ);
         var cell = Jupyter.notebook.get_selected_cell();
         if ((cell instanceof CodeCell) || (cell instanceof MarkdownCell)) {
-            if (!(typ in cell.metadata)) {
-                for (var _typ in typs) {
-                    if (_typ in cell.metadata)
+            if (!('tags' in cell.metadata))
+                cell.metadata.tags = new Array();
+            // We are requesting that typ is set if it isn't set
+            var tstyle = 'style_'+typ;
+            var add_tag = cell.metadata.tags.indexOf(tstyle) === -1;
+            if (add_tag) {
+                // We can only have one style type applied so clear styles
+                for (_typ of typs) {
+                    if (_typ in cell.metadata) {
+                        // Self-cleaning; deprecate the original tags
                         delete cell.metadata[_typ];
+                    }
+                    //console.log(_typ);
+                    var anytstyle = 'style_'+_typ;
+                    //console.log('wtf', cell.metadata.tags, cell.metadata.tags.indexOf(anytstyle), anytstyle)
+                    cell.metadata.tags = cell.metadata.tags.filter(x => x != anytstyle);
+                    //console.log('wtf2', cell.metadata.tags)
                 }
-                cell.metadata[typ] = true;
-            } else delete cell.metadata[typ]; //cell.metadata.commentate = !cell.metadata.commentate
-            setcommentate(cell, typ);
+                if (!('tags' in cell.metadata))
+                    cell.metadata.tags = new Array();
+                //console.log('should be empty',cell.metadata.tags)
+                // Add style tag and no longer support metadata tag
+                //cell.metadata[typ] = true;
+                if (cell.metadata.tags.indexOf(tstyle) === -1)
+                    cell.metadata.tags.push(tstyle);
+            } else {
+                // Remove all instances of it
+                cell.metadata.tags = cell.metadata.tags.filter(x => x != tstyle);
+            }
+            
+            for (typ of typs)
+                setcommentate(cell, typ);
         }
     };
+    /*
     function togglecommentate() {
         console.log("Run togglecommentate");
         toggle('commentate')
@@ -51,13 +91,19 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
         console.log("Run togglestudent");
         toggle('student')
     };
-
+    function togglesolution() {
+        console.log("Run togglesolution");
+        toggle('solution')
+    };
+    */
     var setcommentate = function (cell,typ) {
-        console.log("Run setcommentate");
         var cp = cell.element;
         var prompt = cell.element.find('div.inner_cell');
+        var tstyle = 'style_'+typ;
+        var style_me = cell.metadata.tags.indexOf(tstyle) > -1;
+        //console.log("Run setcommentate", style_me, tstyle, cell.metadata.tags);
         if (cell instanceof CodeCell) {
-            if ((typ in cell.metadata) && cell.metadata[typ] == true) {
+            if (style_me) {
                 cp.addClass('ou_'+typ+'_outer');
                 prompt.addClass('ou_'+typ+'_prompt');
             } else {
@@ -65,7 +111,7 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
                 prompt.removeClass('ou_'+typ+'_prompt');
             }
         } else if (cell instanceof MarkdownCell) {
-            if ((typ in cell.metadata) && cell.metadata[typ] == true) {
+            if (style_me) {
                 cp.addClass('ou_'+typ+'_outer');
             } else {
                 cp.removeClass('ou_'+typ+'_outer');
@@ -76,71 +122,108 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
 
     function oustyle_notebook_commentate() {
 
-        console.log("Run oustyle_notebook_commentate");
+        //console.log("Run oustyle_notebook_commentate");
         /* loop through notebook and set style of commentate cell defined in metadata */
         var cells = Jupyter.notebook.get_cells();
         for (var i in cells) {
-            console.log(i)
+            //console.log(i)
             var cell = cells[i];
             if ((cell instanceof CodeCell) || (cell instanceof MarkdownCell)) {
                 for (_typ of typs) {
-                    console.log(_typ)
-                    if (_typ in cell.metadata) {
-                        console.log('got one...')
-                        setcommentate(cell, _typ);
+                    //console.log(_typ)
+                    var tstyle = 'style_'+_typ;
+                    //Legacy handler
+                    if ((_typ in cell.metadata)) {
+                        //console.log('got one...')
+                        //Update legacy style to tagstyle
+                        // Even though only one type should be set it may be multiple ones are incorrectly set?
+                        // That would need handling?
+                        if (!('tags' in cell.metadata))
+                            cell.metadata.tags = new Array();
+                        if ((cell.metadata[_typ] == true) && (cell.metadata.tags.indexOf(tstyle) === -1))
+                                cell.metadata.tags.push(tstyle);
+                    } 
+                    if (('tags' in cell.metadata) && (cell.metadata.tags.indexOf(tstyle) > -1)) {
+                            //console.log('got one tags...', cell.metadata, cell.metadata.tags)
+                            setcommentate(cell, _typ);
                     }
                 }
             }
         };
     }
 
-
+    //https://stackoverflow.com/a/10000178/454773
+    function handleToggle(passedInElement) {
+        return function() {
+            toggle(passedInElement); 
+        };
+    }
     var initialize = function () {
         var layout_cell_color = function () {
-            var style = document.createElement("style");
-            style.innerHTML = ".ou_student_outer {background-color: #ffffcc;}; .ou_student_prompt {background-color: #ffeecd;};";
-            document.getElementsByTagName("head")[0].appendChild(style);
-
-            style = document.createElement("style");
-            style.innerHTML = ".ou_commentate_outer {background-color: #eda7c3;}; .ou_commentate_prompt {background-color: #f4cadb;};";
-            document.getElementsByTagName("head")[0].appendChild(style);
-
-            style = document.createElement("style");
-            style.innerHTML = ".ou_activity_outer {background-color: #c8ecff;}; .ou_activity_prompt {background-color: #ecf6ff;};";
-            document.getElementsByTagName("head")[0].appendChild(style);
-
+            for (_typ of typs) {
+                var style = document.createElement("style");
+                style.innerHTML = ".ou_"+_typ+"_outer {background-color: "+params[_typ+'_colour']+";}; .ou_commentate_prompt {background-color: "+params[_typ+'_colour']+";};";
+                document.getElementsByTagName("head")[0].appendChild(style);
+            }
         }
 
         layout_cell_color();
         update_params();
-        Jupyter.toolbar.add_buttons_group([
-            Jupyter.keyboard_manager.actions.register ({
-                help : 'Toggle cell comment',
-                icon : 'fa-exclamation-circle',
-                handler : togglecommentate
-            }, 'empinken-commentate', mod_name),
-            Jupyter.keyboard_manager.actions.register ({
-                help : 'Toggle cell activity',
-                icon : 'fa-tasks',
-                handler : toggleactivity
-            }, 'empinken-activity', mod_name),
-            Jupyter.keyboard_manager.actions.register ({
+        var keys = [];
+        console.log("SOLUTION"+params['empinken_solution'])
+        for (_typ of typs){
+            if (params[_typ]) {
+                keys.push(Jupyter.keyboard_manager.actions.register ({
+                    help : 'Toggle cell '+_typ,
+                    icon : typs_config[_typ]['icon'],
+                    handler : handleToggle(_typ)
+                    }, 'empinken-'+_typ, mod_name))
+            }  
+        }
+        /*if (params['solution'])
+            keys.push(Jupyter.keyboard_manager.actions.register ({
+                        help : 'Toggle cell solution',
+                        icon : 'fa-pencil-square-o',
+                        handler : togglesolution
+                        }, 'empinken-solution', mod_name))
+        if (params['commentate'])
+            keys.push(Jupyter.keyboard_manager.actions.register ({
+                        help : 'Toggle cell comment',
+                        icon : 'fa-exclamation-circle',
+                        handler : togglecommentate
+                        }, 'empinken-commentate', mod_name),)
+        if (params['activity'])
+            keys.push(Jupyter.keyboard_manager.actions.register ({
+                        help : 'Toggle cell activity',
+                        icon : 'fa-tasks',
+                        handler : toggleactivity
+                        }, 'empinken-activity', mod_name))
+        if (params['student'])
+            keys.push(Jupyter.keyboard_manager.actions.register ({
                 help : 'Toggle cell student',
                 icon : 'fa-user-circle',
                 handler : togglestudent
-            }, 'empinken-student', mod_name)
-        ]);
+            }, 'empinken-student', mod_name))
+            */
+        Jupyter.toolbar.add_buttons_group(keys);
 
         oustyle_notebook_commentate();
     }
 
     function load_jupyter_extension() {
+        return Jupyter.notebook.config.loaded
+            .then( function(){
+                $.extend(true, params, Jupyter.notebook.config.data.empinken); // update params
+            } )
+            .then(initialize);
         //return Jupyter.notebook.config.loaded.then(initialize);
+        /*
         if (Jupyter.notebook !== undefined && Jupyter.notebook._fully_loaded) {
             // notebook already loaded. Update directly
             initialize();
         }
         events.on("notebook_loaded.Notebook", initialize);
+        */
     }
 
     return {

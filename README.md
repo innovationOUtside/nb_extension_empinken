@@ -3,9 +3,13 @@ Jupyter notebook extension for background colouring selected cells.
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/innovationOUtside/nb_extension_empinken/master)
 
-Install the latest version from this repository:
+Install the latest version from the default branch in this repository:
 
 `pip install --upgrade git+https://github.com/innovationOUtside/nb_extension_empinken.git`
+
+Or from a particular branch (eg the `BRANCH` branch):
+
+`pip install --upgrade git+https://github.com/innovationOUtside/nb_extension_empinken.git@BRANCH`
 
 Install a released version from PyPi:
 
@@ -23,16 +27,17 @@ jupyter nbextension enable empinken/index
 ```
 
 
-Three buttons are provided that toggle the colour of selected code or markdown cells:
+Four buttons are defined provided that toggle the colour of selected code or markdown cells:
 
 - activity cells (blue);
 - student annotation cells (yellow);
-- tutor feedback cells (pink).
+- tutor feedback cells (pink);
+- solution cells (green).
 
 
 ![](.images/empinken_buttons.png)
 
-Not enabled yet, at some point there should be `nbconfigurator` settings that allow you to select which buttons are displayed on the toolbar.
+From the `nbextesions_configurator` panel, you can control which buttons are selected and what colour styling is applied:
 
 ![](.images/empinken_config.png)
 
@@ -54,11 +59,13 @@ The updated version of the extension also includes a yellow cell highlight, that
 - firstly, as an activity prompt to students in provided materials that they need to write something in the notebook as part of the activity;
 - secondly, as a way for students to highlight cells that they have added to the notebook to distinguish them from content that came with the original notebook.
 
+The green solution styling was added in response to a module team request for a style that could be used to distinguish solution cells.
 
-## TO DO
 
-It would probably also make sense to allow users to set colours, which would give me an excuse to learn how to use a colour picker widget.
+## Future Consideraions
 
-It strikes me that the extension could be generalised to allow notebook cell tags to be used to identify cells that should be coloured in particular ways. So eg in configurator, associate the tag "activity" with a selected blue etc.
+The extension could be generalised to allow particular notebook cell tags to be used to identify cells that should be coloured in particular ways. So e.g. in configurator, associate the tag "activity" with a selected blue etc. See the related [`nb_extension_tagstyler`](https://github.com/innovationOUtside/nb_extension_tagstyler) extension that explores how to use cell tags to invoke the application of Bootstrap `alert` styling to correspondingly tagged cells.
 
-Maybe also consider a setting that would colour all student created cells yellow (or whatever) by hooking something on to the notebook's cell add button? 
+Maybe also consider a setting that would colour all student created cells yellow (or whatever) by hooking something on to the notebook's cell add button to tag cells as `contributed`? Or use a pre-distribution step to tag all cells in notebooks provided to students as `distributed`?
+
+Better support for hidden/revealable solutions in activities is an ongoing consideration. Basing this around appropriate tags would seem to be a sensible approach,

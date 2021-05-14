@@ -42,6 +42,13 @@ From the `nbextesions_configurator` panel, you can control which buttons are sel
 ![](.images/empinken_config.png)
 
 
+When cells are toggled, a tag is set on them that is used to apply the styling:
+
+![](.images/empinken_tags.png)
+
+Currently, the following tags are used; `style_activity`, `style_solution`, `style_student` `style_commentate`.
+
+
 ## History
 
 Originally developed in support the OU distance education course *TM351 Data Management and Analysis*, the extension provides toolbar buttoms that highlight selected cells with particular background colours.

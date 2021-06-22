@@ -6,6 +6,8 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
     
     var mod_name = 'empinken';
 
+    var TAG_PREFIX = 'style-';
+
     var CodeCell = codecell.CodeCell;
     var MarkdownCell = textcell.MarkdownCell;
 
@@ -47,18 +49,20 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
             if (!('tags' in cell.metadata))
                 cell.metadata.tags = new Array();
             // We are requesting that typ is set if it isn't set
-            var tstyle = 'style_'+typ;
+            var tstyle = TAG_PREFIX+typ;
             var add_tag = cell.metadata.tags.indexOf(tstyle) === -1;
             if (add_tag) {
                 // We can only have one style type applied so clear styles
                 for (_typ of typs) {
                     if (_typ in cell.metadata) {
                         // Self-cleaning; deprecate the original tags
-                        delete cell.metadata[_typ];
+                        cell.metadata.splice(cell.metadata.indexOf(_typ), 1);
+                        //delete cell.metadata[_typ];
                     }
                     //console.log(_typ);
-                    var anytstyle = 'style_'+_typ;
+                    var anytstyle = TAG_PREFIX+_typ;
                     //console.log('wtf', cell.metadata.tags, cell.metadata.tags.indexOf(anytstyle), anytstyle)
+                    // What does the following achieve?
                     cell.metadata.tags = cell.metadata.tags.filter(x => x != anytstyle);
                     //console.log('wtf2', cell.metadata.tags)
                 }
@@ -99,7 +103,7 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
     var setcommentate = function (cell,typ) {
         var cp = cell.element;
         var prompt = cell.element.find('div.inner_cell');
-        var tstyle = 'style_'+typ;
+        var tstyle = TAG_PREFIX+typ;
         var style_me = cell.metadata.tags.indexOf(tstyle) > -1;
         //console.log("Run setcommentate", style_me, tstyle, cell.metadata.tags);
         if (cell instanceof CodeCell) {
@@ -131,7 +135,8 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
             if ((cell instanceof CodeCell) || (cell instanceof MarkdownCell)) {
                 for (_typ of typs) {
                     //console.log(_typ)
-                    var tstyle = 'style_'+_typ;
+                    var tstyle = TAG_PREFIX+_typ;
+                    var oldstyle = 'style_'+_typ;
                     //Legacy handler
                     if ((_typ in cell.metadata)) {
                         //console.log('got one...')
@@ -141,11 +146,18 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
                         if (!('tags' in cell.metadata))
                             cell.metadata.tags = new Array();
                         if ((cell.metadata[_typ] == true) && (cell.metadata.tags.indexOf(tstyle) === -1))
-                                cell.metadata.tags.push(tstyle);
-                    } 
+                            cell.metadata.tags.push(tstyle);
+                            cell.metadata.splice(cell.metadata.indexOf(_typ), 1);
+                    }
+                    if (('tags' in cell.metadata) && (cell.metadata.tags.indexOf(oldstyle) > -1)) {
+                        cell.metadata.tags.splice(cell.metadata.tags.indexOf(oldstyle), 1);
+                        //delete cell.metadata.tags[oldstyle];
+                        if (cell.metadata.tags.indexOf(tstyle) === -1)
+                            cell.metadata.tags.push(tstyle);
+                    }
                     if (('tags' in cell.metadata) && (cell.metadata.tags.indexOf(tstyle) > -1)) {
-                            //console.log('got one tags...', cell.metadata, cell.metadata.tags)
-                            setcommentate(cell, _typ);
+                        //console.log('got one tags...', cell.metadata, cell.metadata.tags)
+                        setcommentate(cell, _typ);
                     }
                 }
             }

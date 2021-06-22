@@ -46,7 +46,7 @@ When cells are toggled, a tag is set on them that is used to apply the styling:
 
 ![](.images/empinken_tags.png)
 
-Currently, the following tags are used; `style_activity`, `style_solution`, `style_student` `style_commentate`.
+Currently, the following tags are used; <s>`style_activity`, `style_solution`, `style_student` `style_commentate`</s> UPDATED TO: `style-activity`, `style-solution`, `style-student` `style-commentate`
 
 
 ## History

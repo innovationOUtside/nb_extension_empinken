@@ -51,9 +51,9 @@ Currently, the following tags are used; <s>`style_activity`, `style_solution`, `
 
 ## History
 
-Originally developed in support the OU distance education course *TM351 Data Management and Analysis*, the extension provides toolbar buttoms that highlight selected cells with particular background colours.
+Originally developed in support the OU distance education course *TM351 Data Management and Analysis*, the extension provides toolbar buttons that highlight selected cells with particular background colours.
 
-The extension broke after a year or two of use, but I've tried to patch it up again.
+The extension broke after a year or two of use, but has been patched and made more customisable since then.
 
 The original use case allowed course material authors to style activity related cells with a blue colour theme, matching the convention used in online VLE materials.
 
@@ -69,7 +69,7 @@ The updated version of the extension also includes a yellow cell highlight, that
 The green solution styling was added in response to a module team request for a style that could be used to distinguish solution cells.
 
 
-## Future Consideraions
+## Future Considerations
 
 The extension could be generalised to allow particular notebook cell tags to be used to identify cells that should be coloured in particular ways. So e.g. in configurator, associate the tag "activity" with a selected blue etc. See the related [`nb_extension_tagstyler`](https://github.com/innovationOUtside/nb_extension_tagstyler) extension that explores how to use cell tags to invoke the application of Bootstrap `alert` styling to correspondingly tagged cells.
 

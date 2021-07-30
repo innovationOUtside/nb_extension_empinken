@@ -56,8 +56,8 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
                 for (_typ of typs) {
                     if (_typ in cell.metadata) {
                         // Self-cleaning; deprecate the original tags
-                        cell.metadata.splice(cell.metadata.indexOf(_typ), 1);
-                        //delete cell.metadata[_typ];
+                        //cell.metadata.splice(cell.metadata.indexOf(_typ), 1);
+                        delete cell.metadata[_typ];
                     }
                     //console.log(_typ);
                     var anytstyle = TAG_PREFIX+_typ;
@@ -147,7 +147,8 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
                             cell.metadata.tags = new Array();
                         if ((cell.metadata[_typ] == true) && (cell.metadata.tags.indexOf(tstyle) === -1))
                             cell.metadata.tags.push(tstyle);
-                            cell.metadata.splice(cell.metadata.indexOf(_typ), 1);
+                            //cell.metadata.splice(cell.metadata.indexOf(_typ), 1);
+                            delete cell.metadata[_typ];
                     }
                     if (('tags' in cell.metadata) && (cell.metadata.tags.indexOf(oldstyle) > -1)) {
                         cell.metadata.tags.splice(cell.metadata.tags.indexOf(oldstyle), 1);

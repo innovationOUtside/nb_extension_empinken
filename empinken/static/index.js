@@ -172,6 +172,9 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
         };
     }
     var initialize = function () {
+
+        $.extend(true, params, Jupyter.notebook.config.data.empinken);
+        
         var layout_cell_color = function () {
             for (_typ of typs) {
                 var style = document.createElement("style");
@@ -224,19 +227,19 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
     }
 
     function load_jupyter_extension() {
-        return Jupyter.notebook.config.loaded
-            .then( function(){
-                $.extend(true, params, Jupyter.notebook.config.data.empinken); // update params
-            } )
-            .then(initialize);
+        //return Jupyter.notebook.config.loaded
+         //   .then( function(){
+         //       $.extend(true, params, Jupyter.notebook.config.data.empinken); // update params
+         //   } )
+         //   .then(initialize);
         //return Jupyter.notebook.config.loaded.then(initialize);
-        /*
+        
         if (Jupyter.notebook !== undefined && Jupyter.notebook._fully_loaded) {
             // notebook already loaded. Update directly
             initialize();
         }
         events.on("notebook_loaded.Notebook", initialize);
-        */
+        
     }
 
     return {

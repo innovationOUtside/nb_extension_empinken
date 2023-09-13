@@ -120,6 +120,9 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
                 cp.removeClass('ou_'+typ+'_outer');
             }
         }
+        if (cell.metadata.tags.length === 0) {
+                delete cell.metadata.tags;
+        }
     }
 
     function oustyle_notebook_commentate() {
@@ -141,6 +144,9 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
                         setcommentate(cell, _typ);
                     }
                 }
+                if (cell.metadata.tags.length === 0) {
+                    delete cell.metadata.tags;
+        }
             }
         };
     }

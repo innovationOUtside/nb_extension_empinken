@@ -213,18 +213,30 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
          //   } )
          //   .then(initialize);
         //return Jupyter.notebook.config.loaded.then(initialize);
-        
-        if (Jupyter.notebook !== undefined && Jupyter.notebook._fully_loaded) {
-            // notebook already loaded. Update directly
-            initialize();
-        }
-        events.on("notebook_loaded.Notebook", initialize);
-        
+        new Promise(function (resolve, reject) {
+			requirejs(['base/js/namespace'], function (Jupyter_mod) {
+				live_notebook = true;
+				Jupyter = Jupyter_mod;
+				resolve(Jupyter);
+			}, reject);
+		})
+        .then(function () {
+            if (Jupyter.notebook !== undefined && Jupyter.notebook._fully_loaded) {
+                // notebook already loaded. Update directly
+                initialize();
+            }
+        })
+        .then(function () {
+            events.on("notebook_loaded.Notebook", initialize);
+        })
+        .catch(function on_reject (reason) {
+			console.error('empinken error:', reason);
+		});
     }
 
     return {
-        'load_ipython_extension': load_jupyter_extension,
-        'load_jupyter_extension': load_jupyter_extension
+        load_ipython_extension: load_jupyter_extension,
+        load_jupyter_extension: load_jupyter_extension
     };
 
 })

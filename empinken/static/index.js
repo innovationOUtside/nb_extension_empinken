@@ -104,7 +104,7 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
                 cell.metadata.tags = [];
         }
         var style_me = cell.metadata.tags.indexOf(tstyle) !== -1;
-        //console.log("Run setcommentate", style_me, tstyle, cell.metadata.tags);
+        console.log("Run setcommentate", style_me, tstyle, cell.metadata.tags);
         if (cell instanceof CodeCell) {
             if (style_me) {
                 cp.addClass('ou_'+typ+'_outer');
@@ -136,7 +136,7 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
                 }
                 for (typ of typs) {
                     if (cell.metadata.tags.indexOf(tstyle) !== -1) {
-                        //console.log('got one tags...', cell.metadata, cell.metadata.tags)
+                        console.log('got one tags...', cell.metadata, cell.metadata.tags)
                         setcommentate(cell, typ);
                     }
                 }

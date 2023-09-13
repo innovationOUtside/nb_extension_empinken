@@ -35,10 +35,10 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
     var update_params = function () {
         var config = Jupyter.notebook.config;
         for (var key in params) {
-            console.log("KEY "+ key)
+            //console.log("KEY "+ key)
             if (config.data.hasOwnProperty(key))
                 params[key] = config.data[key];
-                console.log("PARAMSKEY "+ key +"DD"+params[key])
+                //console.log("PARAMSKEY "+ key +"DD"+params[key])
         }
     };
 
@@ -104,7 +104,7 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
                 cell.metadata.tags = [];
         }
         var style_me = cell.metadata.tags.indexOf(tstyle) !== -1;
-        console.log("Run setcommentate", style_me, tstyle, cell.metadata.tags);
+        //console.log("Run setcommentate", style_me, tstyle, cell.metadata.tags);
         if (cell instanceof CodeCell) {
             if (style_me) {
                 cp.addClass('ou_'+typ+'_outer');
@@ -137,7 +137,7 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
                 for (_typ of typs) {
                     var tstyle = TAG_PREFIX+_typ;
                     if (cell.metadata.tags.indexOf(tstyle) !== -1) {
-                        console.log('got one tags...', cell.metadata, cell.metadata.tags)
+                        //console.log('got one tags...', cell.metadata, cell.metadata.tags)
                         setcommentate(cell, _typ);
                     }
                 }

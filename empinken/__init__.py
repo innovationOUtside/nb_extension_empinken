@@ -1,6 +1,6 @@
 import pkg_resources
 
-__version__ = '0.0.5'
+__version__ = '0.0.6'
 #__version__ = pkg_resources.require("empinken")[0].version
 #version_info = pkg_resources.parse_version(__version__)
 

@@ -46,38 +46,34 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
         console.log("Run toggle "+typ);
         var cell = Jupyter.notebook.get_selected_cell();
         if ((cell instanceof CodeCell) || (cell instanceof MarkdownCell)) {
-            if (!('tags' in cell.metadata))
-                cell.metadata.tags = new Array();
+            if (cell.metadata.tags === undefined) {
+                cell.metadata.tags = [];
+            }
             // We are requesting that typ is set if it isn't set
             var tstyle = TAG_PREFIX+typ;
             var add_tag = cell.metadata.tags.indexOf(tstyle) === -1;
             if (add_tag) {
                 // We can only have one style type applied so clear styles
-                for (_typ of typs) {
-                    if (_typ in cell.metadata) {
-                        // Self-cleaning; deprecate the original tags
-                        //cell.metadata.splice(cell.metadata.indexOf(_typ), 1);
-                        delete cell.metadata[_typ];
-                    }
+                for (typ of typs) {
                     //console.log(_typ);
-                    var anytstyle = TAG_PREFIX+_typ;
+                    var anytstyle = TAG_PREFIX+typ;
                     //console.log('wtf', cell.metadata.tags, cell.metadata.tags.indexOf(anytstyle), anytstyle)
-                    // What does the following achieve?
+                    // Return tags that are not the anytsyle tag
                     cell.metadata.tags = cell.metadata.tags.filter(x => x != anytstyle);
                     //console.log('wtf2', cell.metadata.tags)
                 }
-                if (!('tags' in cell.metadata))
-                    cell.metadata.tags = new Array();
                 //console.log('should be empty',cell.metadata.tags)
                 // Add style tag and no longer support metadata tag
                 //cell.metadata[typ] = true;
-                if (cell.metadata.tags.indexOf(tstyle) === -1)
-                    cell.metadata.tags.push(tstyle);
+                cell.metadata.tags.push(tstyle);
             } else {
                 // Remove all instances of it
                 cell.metadata.tags = cell.metadata.tags.filter(x => x != tstyle);
             }
-            
+            // If tags list is empty, remove it
+            if (cell.metadata.tags.length === 0) {
+                delete cell.metadata.tags;
+            }
             for (typ of typs)
                 setcommentate(cell, typ);
         }

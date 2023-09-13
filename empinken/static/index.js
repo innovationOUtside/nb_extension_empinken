@@ -134,10 +134,11 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
                 if (cell.metadata.tags === undefined) {
                     cell.metadata.tags = [];
                 }
-                for (typ of typs) {
+                for (_typ of typs) {
+                    var tstyle = TAG_PREFIX+_typ;
                     if (cell.metadata.tags.indexOf(tstyle) !== -1) {
                         console.log('got one tags...', cell.metadata, cell.metadata.tags)
-                        setcommentate(cell, typ);
+                        setcommentate(cell, _typ);
                     }
                 }
             }

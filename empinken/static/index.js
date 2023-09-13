@@ -100,7 +100,10 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
         var cp = cell.element;
         var prompt = cell.element.find('div.inner_cell');
         var tstyle = TAG_PREFIX+typ;
-        var style_me = cell.metadata.tags.indexOf(tstyle) > -1;
+        if (cell.metadata.tags === undefined) {
+                cell.metadata.tags = [];
+        }
+        var style_me = cell.metadata.tags.indexOf(tstyle) !== -1;
         //console.log("Run setcommentate", style_me, tstyle, cell.metadata.tags);
         if (cell instanceof CodeCell) {
             if (style_me) {
@@ -119,7 +122,6 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
         }
     }
 
-
     function oustyle_notebook_commentate() {
 
         //console.log("Run oustyle_notebook_commentate");
@@ -129,32 +131,13 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
             //console.log(i)
             var cell = cells[i];
             if ((cell instanceof CodeCell) || (cell instanceof MarkdownCell)) {
-                for (_typ of typs) {
-                    //console.log(_typ)
-                    var tstyle = TAG_PREFIX+_typ;
-                    var oldstyle = 'style_'+_typ;
-                    //Legacy handler
-                    if ((_typ in cell.metadata)) {
-                        //console.log('got one...')
-                        //Update legacy style to tagstyle
-                        // Even though only one type should be set it may be multiple ones are incorrectly set?
-                        // That would need handling?
-                        if (!('tags' in cell.metadata))
-                            cell.metadata.tags = new Array();
-                        if ((cell.metadata[_typ] == true) && (cell.metadata.tags.indexOf(tstyle) === -1))
-                            cell.metadata.tags.push(tstyle);
-                            //cell.metadata.splice(cell.metadata.indexOf(_typ), 1);
-                            delete cell.metadata[_typ];
-                    }
-                    if (('tags' in cell.metadata) && (cell.metadata.tags.indexOf(oldstyle) > -1)) {
-                        cell.metadata.tags.splice(cell.metadata.tags.indexOf(oldstyle), 1);
-                        //delete cell.metadata.tags[oldstyle];
-                        if (cell.metadata.tags.indexOf(tstyle) === -1)
-                            cell.metadata.tags.push(tstyle);
-                    }
-                    if (('tags' in cell.metadata) && (cell.metadata.tags.indexOf(tstyle) > -1)) {
+                if (cell.metadata.tags === undefined) {
+                    cell.metadata.tags = [];
+                }
+                for (typ of typs) {
+                    if (cell.metadata.tags.indexOf(tstyle) !== -1) {
                         //console.log('got one tags...', cell.metadata, cell.metadata.tags)
-                        setcommentate(cell, _typ);
+                        setcommentate(cell, typ);
                     }
                 }
             }

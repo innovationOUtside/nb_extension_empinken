@@ -164,7 +164,7 @@ define(['base/js/namespace', 'base/js/events', 'notebook/js/textcell', 'notebook
         var layout_cell_color = function () {
             for (_typ of typs) {
                 var style = document.createElement("style");
-                style.innerHTML = ".ou_"+_typ+"_outer {background-color: "+params[_typ+'_colour']+";}; .ou_commentate_prompt {background-color: "+params[_typ+'_colour']+";};";
+                style.innerHTML = ".ou_"+_typ+"_outer, .ou_"+_typ+"_outer.selected {background-color: "+params[_typ+'_colour']+";}; .ou_commentate_prompt {background-color: "+params[_typ+'_colour']+";};";
                 document.getElementsByTagName("head")[0].appendChild(style);
             }
         }

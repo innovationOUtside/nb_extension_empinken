@@ -21,7 +21,7 @@ setuptools.setup(
     url='https://github.com/innovationOUtside/nb_extension_empinken',
     include_package_data=True,
     install_requires=[
-        'jupyter_nbextensions_configurator'
+        'notebook<7','jupyter_nbextensions_configurator'
     ],
     data_files=[
         # like `jupyter nbextension install --sys-prefix`
